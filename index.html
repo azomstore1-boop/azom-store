@@ -17,7 +17,7 @@
 <p class="muted">স্টক ও ডেলিভারি চার্জ অর্ডার কনফার্মের সময় যাচাই করা হবে। WhatsApp খুললে Send চাপতে হবে।</p>
 <button class="green" style="width:100%" id="checkout" type="submit">তথ্য যাচাই করে WhatsApp-এ অর্ডার করুন</button>
 </form></div></div><div id="detail" class="detail" onclick="if(event.target===this)closeDetail()"><div class="modal" id="detailBody"></div></div>
-<div id="ordersModal" class="detail" onclick="if(event.target===this)closeOrders()"><div class="modal"><div class="row"><h2 style="margin:0">📦 আমার অর্ডার</h2><button class="outline" onclick="closeOrders()">✕</button></div><p class="muted">এই ব্রাউজারে সংরক্ষিত আপনার অর্ডারগুলো এখানে দেখা যাবে।</p><div id="ordersList"></div></div></div>
+<div id="ordersModal" class="detail" onclick="if(event.target===this)closeOrders()"><div class="modal"><div class="row"><h2 style="margin:0">📦 আমার অর্ডার</h2><button class="outline" onclick="closeOrders()">✕</button></div><p class="muted">এই একই ব্রাউজারে সংরক্ষিত অর্ডারগুলো এখানে দেখা যাবে। অন্য ফোনে দেখতে অনলাইন ডেটাবেস প্রয়োজন।</p><div id="ordersList"></div></div></div>
 <footer>© Azom Store · Orders via WhatsApp only</footer><script>
 // SETUP: Paste the Google Sheets published CSV URL between the quotes below.
 const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTJYPy8T-9Ds9qXd0lKk0P7XGyCUcqH-1RasnsIAI9Ivi--XHr6Wi9mbc5lWL-gT3ppUOnq6h97p-rY/pub?gid=0&single=true&output=csv';
@@ -43,7 +43,7 @@ function checkout(event){event.preventDefault();const form=$('orderForm');if(!fo
 const orderRecord={orderId,date:new Date().toLocaleString('bn-BD'),customerName:val('customerName'),customerPhone:phone,address:[val('customerVillage'),val('customerThana'),val('customerDistrict'),val('customerLandmark')].filter(Boolean).join(', '),paymentMethod:val('paymentMethod'),paymentNumber:PAYMENT_NUMBER,paymentSender:val('paymentSender'),paymentTrx:val('paymentTrx'),subtotal:sum,delivery:DELIVERY_CHARGE,total:sum+DELIVERY_CHARGE,items:lines.map(x=>({id:x.p.id,name:x.p.name,price:x.p.price,qty:x.qty})),message:msg};
 saveOrder(orderRecord);
 msg=msg.replace('আমি নিচের প্রোডাক্টগুলো অর্ডার করতে চাই:','অর্ডার আইডি: '+orderId+'\nআমি নিচের প্রোডাক্টগুলো অর্ডার করতে চাই:');
-window.open('https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(msg),'_blank','noopener,noreferrer')}
+closeCart();showStatus('অর্ডার এই ব্রাউজারে সংরক্ষণ করা হয়েছে। WhatsApp খুললে Send চাপুন।');window.location.href='https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(msg)}
 $('paymentInstructions').textContent=PAYMENT_NUMBER?'৳১৩০ Send Money করুন: '+PAYMENT_NUMBER+' (শুধু বিকাশ পার্সোনাল, Send Money)। Transaction ID সংরক্ষণ করুন।':'পেমেন্ট নম্বর এখনো সেট করা হয়নি। দোকানের সঙ্গে WhatsApp-এ যোগাযোগ করে সঠিক নম্বর নিশ্চিত করুন; নম্বর না জেনে টাকা পাঠাবেন না।';
 ['search','category','sort'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',render));load();
 </script></body></html>
